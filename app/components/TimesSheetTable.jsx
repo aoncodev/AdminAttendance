@@ -18,6 +18,21 @@ function formatDateForAPI(date) {
   return format(new Date(date), "yyyy-MM-dd");
 }
 
+// Format datetime to Korean format with date
+function formatKoreanDateTime(dateTimeStr) {
+  if (!dateTimeStr) return "N/A";
+
+  const date = new Date(dateTimeStr);
+  // Add 9 hours for Korean time (UTC+9)
+  const koreanDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+
+  return koreanDate.toLocaleString("ko-KR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+}
+
 export default function TimesheetTable() {
   const [selectedDate, setSelectedDate] = useState(
     new Date().setHours(0, 0, 0, 0)
@@ -42,8 +57,6 @@ export default function TimesheetTable() {
 
       const data = response.data.employees;
 
-      console.log(data);
-
       // Filter out employees with no attendance
       const filteredData = data.filter((employee) => employee.attendance);
 
@@ -57,18 +70,9 @@ export default function TimesheetTable() {
         return {
           name: employee.employee.name,
           role: employee.employee.role,
-          clockIn: new Date(employee.attendance.clock_in).toLocaleTimeString(
-            [],
-            {
-              hour: "2-digit",
-              minute: "2-digit",
-            }
-          ),
+          clockIn: formatKoreanDateTime(employee.attendance.clock_in),
           clockOut: employee.attendance.clock_out
-            ? new Date(employee.attendance.clock_out).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })
+            ? formatKoreanDateTime(employee.attendance.clock_out)
             : "N/A",
           breaks: employee.breaks.map(
             (br) => `${br.break_type} - ${br.total_break_time}`
