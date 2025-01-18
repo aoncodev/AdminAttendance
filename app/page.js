@@ -3,27 +3,32 @@ import { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import TimesheetTable from "./components/TimesSheetTable";
 import EmployeesTable from "./components/EmployeesTable";
-import { FaMoon, FaSun } from "react-icons/fa"; // Or use lucid-react-icons
-import { redirect } from "next/navigation";
+import { FaMoon, FaSun } from "react-icons/fa";
+import { useRouter } from "next/navigation"; // Use useRouter for redirection
 import { useAuth } from "../context/auth";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("dashboard");
-
-  // Check localStorage for the saved theme preference on load
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(false); // State for dark mode
+  const [loading, setLoading] = useState(true); // Loading state
   const { isAuthenticated } = useAuth();
+  const router = useRouter();
 
+  // Check authentication state and redirect if necessary
   useEffect(() => {
-    if (!isAuthenticated) {
-      redirect("/login"); // Redirect if not authenticated
+    if (isAuthenticated) {
+      setLoading(false); // Stop loading if authenticated
+    } else {
+      const timer = setTimeout(() => {
+        router.push("/login"); // Redirect to login after 3 seconds
+      }, 3000);
+
+      return () => clearTimeout(timer); // Clean up the timer on component unmount
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, router]);
 
-  if (!isAuthenticated) return null;
-
+  // Read dark mode preference from localStorage
   useEffect(() => {
-    // Read dark mode preference from localStorage
     const savedDarkMode = localStorage.getItem("darkMode") === "true";
     setDarkMode(savedDarkMode);
     if (savedDarkMode) {
@@ -33,18 +38,30 @@ export default function Home() {
     }
   }, []);
 
-  // Toggle the theme and save it in localStorage
+  // Toggle dark mode and save to localStorage
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
+
+    // Update body class
     if (newDarkMode) {
       document.body.classList.add("dark");
-      localStorage.setItem("darkMode", "true");
     } else {
       document.body.classList.remove("dark");
-      localStorage.setItem("darkMode", "false");
     }
+
+    // Save to localStorage
+    localStorage.setItem("darkMode", newDarkMode);
   };
+
+  // Show a loading spinner while checking authentication
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-gray-600">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -59,7 +76,7 @@ export default function Home() {
       <div className="flex-1 overflow-auto p-14 relative">
         {/* Dark Mode Toggle Button */}
         <button
-          onClick={toggleDarkMode}
+          onClick={toggleDarkMode} // Use toggleDarkMode function
           className="absolute top-4 right-4 p-2 rounded-full bg-gray-300 dark:bg-gray-700"
         >
           {darkMode ? (

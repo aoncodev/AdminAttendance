@@ -1,6 +1,6 @@
 "use client";
 // pages/admin-login.js
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Scanner } from "@yudiel/react-qr-scanner";
@@ -8,24 +8,32 @@ import { useAuth } from "../../context/auth";
 import { useRouter } from "next/navigation";
 
 const AdminLogin = () => {
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    // Redirect to the home page if already logged in
+    if (isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthenticated, router]);
 
   const handleLogin = (result) => {
     console.log("QR Code scanned:", result);
     // Check if QR code data is valid
     if (!result || !result[0] || !result[0].rawValue) {
-      throw new Error("Invalid QR code data");
+      alert("Invalid QR code data");
+      return;
     }
 
-    // Call handle function directly with the QR code
+    // Call the backend API with the scanned QR code
     handle(result[0].rawValue);
   };
 
   const handle = async (qr_id) => {
     try {
       // Send the scanned QR code to your API for validation
-      const response = await fetch("https://aoncodev.work.gd/login", {
+      const response = await fetch("https://aoncodev.work.gd/admin/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,12 +50,12 @@ const AdminLogin = () => {
       const data = await response.json();
       console.log("API Response:", data);
 
-      // Check the user role
+      // Check if the role is admin
       if (data.role === "admin") {
-        login(data); // Pass user data if needed
-        router.push("/");
+        login(data); // Store the token and update authentication state
+        router.push("/"); // Redirect to the home page
       } else {
-        throw new Error("Access denied: User is not an admin.");
+        alert("Access denied: User is not an admin.");
       }
     } catch (error) {
       console.error("Login failed:", error.message);
