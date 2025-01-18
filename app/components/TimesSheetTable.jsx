@@ -74,9 +74,13 @@ export default function TimesheetTable() {
           clockOut: employee.attendance.clock_out
             ? formatKoreanDateTime(employee.attendance.clock_out)
             : "N/A",
-          breaks: employee.breaks.map(
-            (br) => `${br.break_type} - ${br.total_break_time}`
-          ),
+          breaks: employee.breaks.map((br) => {
+            // Extract hours and minutes from total_break_time
+            const [hours, minutes] = br.total_break_time.split(":");
+            const formattedTime = `${hours}:${minutes}`; // Keep only hours and minutes
+
+            return `${br.break_type} - ${formattedTime}`;
+          }),
           totalBreak: decimalToTime(employee.total_break_time),
           totalHours: decimalToTime(employee.total_hours_excluding_breaks),
           totalWage:
