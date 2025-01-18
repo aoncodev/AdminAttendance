@@ -72,17 +72,21 @@ export default function TimesheetTable() {
           clockOut: employee.attendance.clock_out
             ? formatKoreanDateTime(employee.attendance.clock_out)
             : "N/A",
-          breaks: employee.breaks.map((br) => {
-            // Extract hours and minutes from total_break_time
-            const [hours, minutes] = br.total_break_time.split(":");
-            const formattedTime = `${hours}:${minutes}`; // Keep only hours and minutes
-
-            return `${br.break_type} - ${formattedTime}`;
+          breaks: (employee.breaks || []).map((br) => {
+            // Handle ongoing breaks (no total_break_time)
+            if (br.total_break_time) {
+              const [hours, minutes] = br.total_break_time.split(":");
+              const formattedTime = `${hours}:${minutes}`; // Keep only hours and minutes
+              return `${br.break_type} - ${formattedTime}`;
+            } else if (br.break_start && !br.break_end) {
+              return `${br.break_type} - Break in progress`; // Handle ongoing break
+            } else {
+              return `${br.break_type} - Processing`; // Fallback for other cases
+            }
           }),
-          totalBreak: decimalToTime(employee.total_break_time),
-          totalHours: decimalToTime(employee.total_hours_excluding_breaks),
-          totalWage:
-            employee.employee.wage * employee.total_hours_excluding_breaks,
+          totalBreak: decimalToTime(employee.total_break_time || 0), // Default to 0 if undefined
+          totalHours: decimalToTime(employee.total_hours_excluding_breaks || 0), // Default to 0 if undefined
+          totalWage: totalWage,
         };
       });
 
