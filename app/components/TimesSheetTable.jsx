@@ -23,10 +23,8 @@ function formatKoreanDateTime(dateTimeStr) {
   if (!dateTimeStr) return "N/A";
 
   const date = new Date(dateTimeStr);
-  // Add 9 hours for Korean time (UTC+9)
-  const koreanDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
 
-  return koreanDate.toLocaleString("ko-KR", {
+  return date.toLocaleString("ko-KR", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: false,

@@ -31,12 +31,9 @@ import {
 
 const API_URL = "https://aoncodev.work.gd";
 
-// Formatting Functions
-function formatDateTimeForInput(utcTimeStr) {
-  if (!utcTimeStr) return "";
-  const utcDate = new Date(utcTimeStr);
-  const kstOffset = 9 * 60; // KST is UTC+9
-  const kstDate = new Date(utcDate.getTime() + kstOffset * 60 * 1000);
+function formatDateTimeForInput(kstTimeStr) {
+  if (!kstTimeStr) return "";
+  const kstDate = new Date(kstTimeStr); // Assume input is already in KST
   const year = kstDate.getFullYear();
   const month = String(kstDate.getMonth() + 1).padStart(2, "0");
   const date = String(kstDate.getDate()).padStart(2, "0");
@@ -45,11 +42,10 @@ function formatDateTimeForInput(utcTimeStr) {
   return `${year}-${month}-${date}T${hours}:${minutes}`;
 }
 
-function formatDateTimeForDisplay(utcTimeStr) {
-  if (!utcTimeStr) return "-";
-  const utcDate = new Date(utcTimeStr);
-  const kstOffset = 9 * 60; // KST is UTC+9
-  const kstDate = new Date(utcDate.getTime() + kstOffset * 60 * 1000);
+// Format KST datetime string for user-friendly display
+function formatDateTimeForDisplay(kstTimeStr) {
+  if (!kstTimeStr) return "-";
+  const kstDate = new Date(kstTimeStr); // Assume input is already in KST
   const hours = String(kstDate.getHours()).padStart(2, "0");
   const minutes = String(kstDate.getMinutes()).padStart(2, "0");
   return `${hours}:${minutes}`;

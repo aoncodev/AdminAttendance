@@ -17,16 +17,18 @@ import { Input } from "@/components/ui/input";
 
 const API_URL = "https://aoncodev.work.gd";
 
-function formatDateTimeForDisplay(utcTimeStr) {
-  if (!utcTimeStr) return "-";
-  const utcDate = new Date(utcTimeStr);
-  const kstOffset = 9 * 60; // KST is UTC+9
-  const kstDate = new Date(utcDate.getTime() + kstOffset * 60 * 1000);
-  const hours = String(kstDate.getHours()).padStart(2, "0");
-  const minutes = String(kstDate.getMinutes()).padStart(2, "0");
-  return `${hours}:${minutes}`;
+// Format datetime strings received from the backend (already in KST)
+function formatKoreanDateTime(dateTimeStr) {
+  if (!dateTimeStr) return "N/A";
+  const date = new Date(dateTimeStr);
+  return date.toLocaleString("ko-KR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
 }
 
+// Convert decimal hours to HH:mm format
 function decimalToTime(decimal) {
   const hours = Math.floor(decimal);
   const minutes = Math.round((decimal - hours) * 60);
@@ -60,6 +62,10 @@ export default function EmployeeDetails() {
       const response = await fetch(
         `${API_URL}/attendance/${id}?month=${monthFilter}&page=${currentPage}&per_page=${recordsPerPage}`
       );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch attendance data.");
+      }
 
       const data = await response.json();
       setTimesheet(data.attendance_records || []); // Ensure timesheet is always an array
@@ -110,23 +116,17 @@ export default function EmployeeDetails() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All</SelectItem>
-                <SelectItem value="1">January</SelectItem>
-                <SelectItem value="2">February</SelectItem>
-                <SelectItem value="3">March</SelectItem>
-                <SelectItem value="4">April</SelectItem>
-                <SelectItem value="5">May</SelectItem>
-                <SelectItem value="6">June</SelectItem>
-                <SelectItem value="7">July</SelectItem>
-                <SelectItem value="8">August</SelectItem>
-                <SelectItem value="9">September</SelectItem>
-                <SelectItem value="10">October</SelectItem>
-                <SelectItem value="11">November</SelectItem>
-                <SelectItem value="12">December</SelectItem>
+                {[...Array(12)].map((_, i) => (
+                  <SelectItem key={i + 1} value={(i + 1).toString()}>
+                    {new Date(0, i).toLocaleString("default", {
+                      month: "long",
+                    })}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
         </div>
-
         <div>No attendance records found.</div>
       </div>
     );
@@ -153,18 +153,11 @@ export default function EmployeeDetails() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All</SelectItem>
-              <SelectItem value="1">January</SelectItem>
-              <SelectItem value="2">February</SelectItem>
-              <SelectItem value="3">March</SelectItem>
-              <SelectItem value="4">April</SelectItem>
-              <SelectItem value="5">May</SelectItem>
-              <SelectItem value="6">June</SelectItem>
-              <SelectItem value="7">July</SelectItem>
-              <SelectItem value="8">August</SelectItem>
-              <SelectItem value="9">September</SelectItem>
-              <SelectItem value="10">October</SelectItem>
-              <SelectItem value="11">November</SelectItem>
-              <SelectItem value="12">December</SelectItem>
+              {[...Array(12)].map((_, i) => (
+                <SelectItem key={i + 1} value={(i + 1).toString()}>
+                  {new Date(0, i).toLocaleString("default", { month: "long" })}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -190,14 +183,14 @@ export default function EmployeeDetails() {
             {timesheet.map((entry) => (
               <tr key={entry.id} className="border-b">
                 <td className="px-4 py-2">
-                  {new Date(entry.clock_in).toLocaleDateString("en-US")}
+                  {new Date(entry.clock_in).toLocaleDateString("ko-KR")}
                 </td>
                 <td className="px-4 py-2">{entry.employee_name}</td>
                 <td className="px-4 py-2">
-                  <span>{formatDateTimeForDisplay(entry.clock_in)}</span>
+                  {formatKoreanDateTime(entry.clock_in)}
                 </td>
                 <td className="px-4 py-2">
-                  <span>{formatDateTimeForDisplay(entry.clock_out)}</span>
+                  {formatKoreanDateTime(entry.clock_out)}
                 </td>
                 <td className="px-4 py-2">
                   {entry.break_logs.length > 0 ? (
@@ -205,8 +198,8 @@ export default function EmployeeDetails() {
                       <div key={index}>
                         <span className="block text-sm">
                           {breakItem.break_type} (
-                          {formatDateTimeForDisplay(breakItem.break_start)} -{" "}
-                          {formatDateTimeForDisplay(breakItem.break_end)})
+                          {formatKoreanDateTime(breakItem.break_start)} -{" "}
+                          {formatKoreanDateTime(breakItem.break_end)})
                         </span>
                       </div>
                     ))
