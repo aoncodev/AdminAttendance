@@ -194,15 +194,21 @@ export default function EmployeeDetails() {
                 </td>
                 <td className="px-4 py-2">
                   {entry.break_logs.length > 0 ? (
-                    entry.break_logs.map((breakItem, index) => (
-                      <div key={index}>
-                        <span className="block text-sm">
-                          {breakItem.break_type} (
-                          {formatKoreanDateTime(breakItem.break_start)} -{" "}
-                          {formatKoreanDateTime(breakItem.break_end)})
-                        </span>
-                      </div>
-                    ))
+                    // Sort break_logs by break_start before rendering
+                    [...entry.break_logs]
+                      .sort(
+                        (a, b) =>
+                          new Date(a.break_start) - new Date(b.break_start)
+                      )
+                      .map((breakItem, index) => (
+                        <div key={index}>
+                          <span className="block text-sm">
+                            {breakItem.break_type} (
+                            {formatKoreanDateTime(breakItem.break_start)} -{" "}
+                            {formatKoreanDateTime(breakItem.break_end)})
+                          </span>
+                        </div>
+                      ))
                   ) : (
                     <span>No breaks</span>
                   )}
