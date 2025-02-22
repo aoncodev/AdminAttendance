@@ -175,6 +175,7 @@ export default function EmployeeDetails() {
               <th className="text-left px-4 py-2">Total Breaks</th>
               <th className="text-left px-4 py-2">Total Hours</th>
               <th className="text-left px-4 py-2">Total Hours - Breaks</th>
+              <th className="text-left px-4 py-2">Wage</th>
               <th className="text-left px-4 py-2">Total Wage</th>
               <th className="text-left px-4 py-2">Action</th>
             </tr>
@@ -223,6 +224,7 @@ export default function EmployeeDetails() {
                   {decimalToTime(entry.total_hours_excluding_breaks)}
                 </td>
                 <td className="px-4 py-2">₩{entry.total_wage.toFixed(0)}</td>
+                <td className="px-4 py-2">₩{entry.net_pay.toFixed(0)}</td>
                 <td className="px-4 py-2">
                   <Link
                     href={`/attendance/${entry.id}`}

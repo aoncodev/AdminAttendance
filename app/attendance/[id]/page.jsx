@@ -49,6 +49,14 @@ function formatDateTimeForDisplay(kstTimeStr) {
   return `${hours}:${minutes}`;
 }
 
+function formatMinutesToHHMM(minutes) {
+  const hours = Math.floor(minutes / 60);
+  const mins = Math.floor(minutes % 60);
+  return `${hours.toString().padStart(2, "0")}:${mins
+    .toString()
+    .padStart(2, "0")}`;
+}
+
 function decimalToTime(decimal) {
   const hours = Math.floor(decimal);
   const minutes = Math.floor((decimal - hours) * 60);
@@ -433,10 +441,10 @@ const AttendanceDetailPage = () => {
               <TableHead>Employee Name</TableHead>
               <TableHead>Clock In</TableHead>
               <TableHead>Clock Out</TableHead>
-              <TableHead>Has Clocked Out</TableHead>
               <TableHead>Total Hours</TableHead>
               <TableHead>Total Hours (Excluding Breaks)</TableHead>
               <TableHead>Total Break Time (hrs)</TableHead>
+              <TableHead>Total Late Time</TableHead>
               <TableHead>Total Wage</TableHead>
               <TableHead>Total Penalties</TableHead>
               <TableHead>Total Bonus</TableHead>
@@ -516,13 +524,16 @@ const AttendanceDetailPage = () => {
                   </div>
                 )}
               </TableCell>
-              <TableCell>{attendance.has_clocked_out ? "Yes" : "No"}</TableCell>
+
               <TableCell>{decimalToTime(attendance.total_hours)}</TableCell>
               <TableCell>
                 {decimalToTime(attendance.total_hours_excluding_breaks)}
               </TableCell>
               <TableCell>
                 {decimalToTime(attendance.total_break_time)}
+              </TableCell>
+              <TableCell>
+                {formatMinutesToHHMM(attendance.total_late_minutes)}
               </TableCell>
               <TableCell>₩{attendance.total_wage.toFixed(0)}</TableCell>
               <TableCell>₩{attendance.total_penalties.toFixed(0)}</TableCell>
