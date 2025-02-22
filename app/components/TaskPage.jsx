@@ -56,7 +56,7 @@ const TasksPage = () => {
   const fetchFilteredTasks = async () => {
     try {
       setLoading(true);
-      let url = `http://aoncodev.work.gd:8000/tasks/filter?task_date=${filterDate}`;
+      let url = `https://aoncodev.work.gd:8000/tasks/filter?task_date=${filterDate}`;
       if (filterEmployee) {
         url += `&employee_id=${filterEmployee}`;
       }
@@ -77,7 +77,7 @@ const TasksPage = () => {
   // Fetch employees to populate the dropdown
   const fetchEmployees = async () => {
     try {
-      const response = await fetch("http://aoncodev.work.gd:8000/employees/");
+      const response = await fetch("https://aoncodev.work.gd:8000/employees/");
       if (!response.ok) {
         throw new Error("Failed to fetch employees");
       }
@@ -92,7 +92,7 @@ const TasksPage = () => {
   // Create a new task using the form data
   const handleCreateTask = async () => {
     try {
-      const response = await fetch("http://aoncodev.work.gd:8000/tasks/", {
+      const response = await fetch("https://aoncodev.work.gd:8000/tasks/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -117,7 +117,7 @@ const TasksPage = () => {
   const handleDeleteTask = async (taskId) => {
     try {
       const response = await fetch(
-        `http://aoncodev.work.gd:8000/tasks/${taskId}`,
+        `https://aoncodev.work.gd:8000/tasks/${taskId}`,
         {
           method: "DELETE",
         }
@@ -137,7 +137,7 @@ const TasksPage = () => {
   const handleToggleTask = async (taskId) => {
     try {
       const response = await fetch(
-        `http://aoncodev.work.gd:8000/tasks/${taskId}/toggle`,
+        `https://aoncodev.work.gd:8000/tasks/${taskId}/toggle`,
         { method: "PUT" }
       );
       if (!response.ok) {

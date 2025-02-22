@@ -347,7 +347,7 @@ const AttendanceDetailPage = () => {
   const handleToggleTask = async (taskId) => {
     try {
       const response = await fetch(
-        `http://aoncodev.work.gd:8000/tasks/${taskId}/toggle`,
+        `https://aoncodev.work.gd:8000/tasks/${taskId}/toggle`,
         {
           method: "PUT",
         }
