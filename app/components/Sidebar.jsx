@@ -1,4 +1,4 @@
-import { Users, LayoutDashboard } from "lucide-react";
+import { Users, LayoutDashboard, ClipboardList } from "lucide-react";
 
 export default function Sidebar({ activeTab, onTabChange }) {
   return (
@@ -26,6 +26,17 @@ export default function Sidebar({ activeTab, onTabChange }) {
         >
           <Users className="h-5 w-5" />
           <span>Employees</span>
+        </button>
+        <button
+          onClick={() => onTabChange("tasks")}
+          className={`flex items-center space-x-2 w-full p-2 rounded ${
+            activeTab === "tasks"
+              ? "bg-primary text-primary-foreground"
+              : "hover:bg-accent"
+          }`}
+        >
+          <ClipboardList className="h-5 w-5" />
+          <span>Tasks</span>
         </button>
       </nav>
     </div>

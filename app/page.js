@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import TimesheetTable from "./components/TimesSheetTable";
 import EmployeesTable from "./components/EmployeesTable";
+import TasksPage from "./components/TaskPage"; // Import your tasks management component
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useRouter } from "next/navigation"; // Use useRouter for redirection
 import { useAuth } from "../context/auth";
@@ -90,11 +91,15 @@ export default function Home() {
           <div className="space-y-6">
             <TimesheetTable />
           </div>
-        ) : (
+        ) : activeTab === "employees" ? (
           <div className="space-y-6">
             <EmployeesTable />
           </div>
-        )}
+        ) : activeTab === "tasks" ? (
+          <div className="space-y-6">
+            <TasksPage />
+          </div>
+        ) : null}
       </div>
     </div>
   );
