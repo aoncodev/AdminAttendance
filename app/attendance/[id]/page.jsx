@@ -28,7 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const API_URL = "http://localhost:8000";
+const API_URL = "http://aoncodev.work.gd:8000";
 
 function formatDateTimeForInput(kstTimeStr) {
   if (!kstTimeStr) return "";
@@ -93,7 +93,7 @@ const AttendanceDetailPage = () => {
   const fetchTasks = async (employeeId, taskDate) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/tasks/filter?employee_id=${employeeId}&task_date=${taskDate}`
+        `http://aoncodev.work.gd:8000/tasks/filter?employee_id=${employeeId}&task_date=${taskDate}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch tasks.");
@@ -110,7 +110,7 @@ const AttendanceDetailPage = () => {
   const fetchAttendanceDetails = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8000/get/attendance/${id}`
+        `http://aoncodev.work.gd:8000/get/attendance/${id}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch attendance details.");
@@ -349,7 +349,7 @@ const AttendanceDetailPage = () => {
   const handleToggleTask = async (taskId) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/tasks/${taskId}/toggle`,
+        `http://aoncodev.work.gd:8000/tasks/${taskId}/toggle`,
         {
           method: "PUT",
         }
