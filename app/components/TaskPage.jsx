@@ -19,6 +19,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+const API_URL = "https://aoncodev.work.gd";
+
 const TasksPage = () => {
   // Tasks, employees and loading state
   const [tasks, setTasks] = useState([]);
@@ -56,7 +58,7 @@ const TasksPage = () => {
   const fetchFilteredTasks = async () => {
     try {
       setLoading(true);
-      let url = `https://aoncodev.work.gd:8000/tasks/filter?task_date=${filterDate}`;
+      let url = `${API_URL}/tasks/filter?task_date=${filterDate}`;
       if (filterEmployee) {
         url += `&employee_id=${filterEmployee}`;
       }
@@ -77,7 +79,7 @@ const TasksPage = () => {
   // Fetch employees to populate the dropdown
   const fetchEmployees = async () => {
     try {
-      const response = await fetch("https://aoncodev.work.gd:8000/employees/");
+      const response = await fetch(`${API_URL}/employees/`);
       if (!response.ok) {
         throw new Error("Failed to fetch employees");
       }
@@ -92,7 +94,7 @@ const TasksPage = () => {
   // Create a new task using the form data
   const handleCreateTask = async () => {
     try {
-      const response = await fetch("https://aoncodev.work.gd:8000/tasks/", {
+      const response = await fetch(`${API_URL}/tasks/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -116,12 +118,9 @@ const TasksPage = () => {
   // Delete a task by its ID
   const handleDeleteTask = async (taskId) => {
     try {
-      const response = await fetch(
-        `https://aoncodev.work.gd:8000/tasks/${taskId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`${API_URL}/tasks/${taskId}`, {
+        method: "DELETE",
+      });
       if (!response.ok) {
         throw new Error("Failed to delete task");
       }
@@ -136,10 +135,9 @@ const TasksPage = () => {
   // Toggle task status by sending a PUT request to the toggle endpoint
   const handleToggleTask = async (taskId) => {
     try {
-      const response = await fetch(
-        `https://aoncodev.work.gd:8000/tasks/${taskId}/toggle`,
-        { method: "PUT" }
-      );
+      const response = await fetch(`${API_URL}/tasks/${taskId}/toggle`, {
+        method: "PUT",
+      });
       if (!response.ok) {
         throw new Error("Failed to toggle task status");
       }

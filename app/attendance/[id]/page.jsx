@@ -28,7 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const API_URL = "https://aoncodev.work.gd:8000";
+const API_URL = "https://aoncodev.work.gd";
 
 function formatDateTimeForInput(kstTimeStr) {
   if (!kstTimeStr) return "";
@@ -346,12 +346,9 @@ const AttendanceDetailPage = () => {
   // Function to toggle the task status
   const handleToggleTask = async (taskId) => {
     try {
-      const response = await fetch(
-        `https://aoncodev.work.gd:8000/tasks/${taskId}/toggle`,
-        {
-          method: "PUT",
-        }
-      );
+      const response = await fetch(`${API_URL}/tasks/${taskId}/toggle`, {
+        method: "PUT",
+      });
       if (!response.ok) {
         throw new Error("Failed to toggle task status");
       }
