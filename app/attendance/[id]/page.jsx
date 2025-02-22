@@ -93,7 +93,7 @@ const AttendanceDetailPage = () => {
   const fetchTasks = async (employeeId, taskDate) => {
     try {
       const response = await fetch(
-        `http://aoncodev.work.gd:8000/tasks/filter?employee_id=${employeeId}&task_date=${taskDate}`
+        `${API_URL}/tasks/filter?employee_id=${employeeId}&task_date=${taskDate}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch tasks.");
@@ -109,9 +109,7 @@ const AttendanceDetailPage = () => {
 
   const fetchAttendanceDetails = async () => {
     try {
-      const response = await fetch(
-        `http://aoncodev.work.gd:8000/get/attendance/${id}`
-      );
+      const response = await fetch(`${API_URL}/get/attendance/${id}`);
       if (!response.ok) {
         throw new Error("Failed to fetch attendance details.");
       }
