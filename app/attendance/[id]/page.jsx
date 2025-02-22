@@ -28,7 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const API_URL = "http://aoncodev.work.gd:8000";
+const API_URL = "https://aoncodev.work.gd:8000";
 
 function formatDateTimeForInput(kstTimeStr) {
   if (!kstTimeStr) return "";
