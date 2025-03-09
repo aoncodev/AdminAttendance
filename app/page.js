@@ -4,6 +4,7 @@ import Sidebar from "./components/Sidebar";
 import TimesheetTable from "./components/TimesSheetTable";
 import EmployeesTable from "./components/EmployeesTable";
 import TasksPage from "./components/TaskPage"; // Import your tasks management component
+import EmployeesPage from "./components/Employeebox";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useRouter } from "next/navigation"; // Use useRouter for redirection
 import { useAuth } from "../context/auth";
@@ -98,6 +99,11 @@ export default function Home() {
         ) : activeTab === "tasks" ? (
           <div className="space-y-6">
             <TasksPage />
+          </div>
+        ) : activeTab === "report" ? (
+          <div className="space-y-6">
+            {/* Render the new EmployeeCards component */}
+            <EmployeesPage />
           </div>
         ) : null}
       </div>

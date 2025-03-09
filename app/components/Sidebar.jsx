@@ -38,6 +38,17 @@ export default function Sidebar({ activeTab, onTabChange }) {
           <ClipboardList className="h-5 w-5" />
           <span>Tasks</span>
         </button>
+        <button
+          onClick={() => onTabChange("report")}
+          className={`flex items-center space-x-2 w-full p-2 rounded ${
+            activeTab === "report"
+              ? "bg-primary text-primary-foreground"
+              : "hover:bg-accent"
+          }`}
+        >
+          <Users className="h-5 w-5" />
+          <span>Employee Report</span>
+        </button>
       </nav>
     </div>
   );
